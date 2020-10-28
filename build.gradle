@@ -30,7 +30,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = 'flowconverter'
 group = 'com.waqasakram.retrofit2.flowconverter'
-version = '0.1.1'
+version = '0.1.0'
 description = 'Flow Converter is adapter to use Kotlin Flow in Retrofit calls'
 
 def libName = "flowconverter"
@@ -77,8 +77,8 @@ publishing {
             pom.withXml {
                 def root = asNode()
                 root.appendNode('description', description)
-                root.appendNode('name', $libName)
-                root.appendNode('url', $libUrl)
+                root.appendNode('name', libName)
+                root.appendNode('url', libUrl)
                 root.children().last() + pomConfig
             }
         }
