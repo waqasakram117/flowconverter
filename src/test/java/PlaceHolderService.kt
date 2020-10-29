@@ -1,3 +1,4 @@
+import com.waqasakram.retrofit2.ApiResult
 import kotlinx.coroutines.flow.Flow
 
 import retrofit2.http.GET

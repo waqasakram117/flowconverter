@@ -1,36 +1,19 @@
-
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
+package com.waqasakram.retrofit2.adapter
+import com.waqasakram.retrofit2.ApiResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.withContext
-import retrofit2.*
+import retrofit2.Call
+import retrofit2.CallAdapter
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.IOException
-import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.net.ConnectException
-
-@ExperimentalCoroutinesApi
-class FlowConverterFactory(private val dispatcher: CoroutineDispatcher = Dispatchers.IO): CallAdapter.Factory() {
-
-    override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit):
-            CallAdapter<*, *>? {
-
-        if (getRawType(returnType) ==  Flow::class.java){//use only Flow
-            val responseType = getParameterUpperBound(0, (returnType as ParameterizedType))
-            if (responseType !is ParameterizedType){
-                return FlowAdapter<Any>(responseType,dispatcher)
-            }else if (getRawType(responseType)  == ApiResult::class.java){//use Flow with ApiResult
-                val response = getParameterUpperBound(0, responseType)
-                return WrappedAdapter<Any>(response,dispatcher)
-            }
-        }
-        return null
-    }
-}
 
 @ExperimentalCoroutinesApi
 class WrappedAdapter<T>(private val responseType: Type, private val dispatcher: CoroutineDispatcher) : CallAdapter<T, Flow<ApiResult<T>>>{
@@ -39,7 +22,7 @@ class WrappedAdapter<T>(private val responseType: Type, private val dispatcher: 
 
     override fun adapt(call: Call<T>): Flow<ApiResult<T>> = callbackFlow {
 
-        fun sendError(error:ApiResult.Error){
+        fun sendError(error: ApiResult.Error){
             sendBlocking(error)
             sendBlocking(ApiResult.EndRequest)
             close(error.error)
@@ -80,7 +63,7 @@ class WrappedAdapter<T>(private val responseType: Type, private val dispatcher: 
     }
 
 
-    fun categoriesErrors(code:Int, throwable:Throwable):ApiResult.Error = when(code){
+    fun categoriesErrors(code:Int, throwable:Throwable): ApiResult.Error = when(code){
 
         in 500..600 ->{
             when(code){
@@ -103,33 +86,5 @@ class WrappedAdapter<T>(private val responseType: Type, private val dispatcher: 
         else -> ApiResult.Error.UnHandled(throwable)
     }
 
-
-}
-
-@ExperimentalCoroutinesApi
-class FlowAdapter<T>(private val responseType: Type, private val dispatcher: CoroutineDispatcher):CallAdapter<T, Flow<T>>{
-    override fun responseType(): Type =  responseType
-
-    override fun adapt(call: Call<T>): Flow<T> = callbackFlow {
-
-        withContext(dispatcher){
-            call.enqueue(object :Callback<T>{
-                override fun onResponse(call: Call<T>, response: Response<T>) {
-                    if (response.isSuccessful){
-                        sendBlocking(response.body())
-                        close()
-                    }else{
-                        val error = response.errorBody()?.string() ?: "Unknown Error"
-                        close(IOException("Error code: ${response.code()} \n $error"))
-                    }
-                }
-                override fun onFailure(call: Call<T>, t: Throwable) {
-                    close(t)
-                }
-            })
-        }
-
-        awaitClose()
-    }
 
 }
