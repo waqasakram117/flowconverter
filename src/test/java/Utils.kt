@@ -1,27 +1,5 @@
 
-import com.waqasakram.retrofit2.factory.FlowConverterFactory
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.runBlocking
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.After
-import org.junit.Test
-
-import org.junit.Before
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.util.concurrent.TimeUnit
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-
-class ExampleUnitTest {
-
-    val response = """[
+const val response = """[
   {
     "userId": 1,
     "id": 1,
@@ -624,49 +602,5 @@ class ExampleUnitTest {
   }
 ]"""
 
-    lateinit var server: MockWebServer
-
-    @Before
-    fun initServer(){
-        server = MockWebServer()
-    }
-
-    @Test
-    fun testLibrary(){
-
-        val service =  Retrofit.Builder()
-                .baseUrl(server.url("/"))
-                .addCallAdapterFactory(FlowConverterFactory())
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(PlaceHolderService::class.java)
-
-        server.enqueue(
-                MockResponse()
-                        .setResponseCode(200)
-                        .setBodyDelay(1, TimeUnit.SECONDS)
-                        .setBody(response))
-
-
-        val result = runBlocking {
-            val call  = service.getTodos()
-
-            call.collect {
-                print("result $it")
-            }
-
-        }
-
-
-//        val request = server.takeRequest()
-
-
-        server.shutdown()
-    }
-
-    @After
-    fun shutdown(){
-
-    }
+class Utils {
 }
