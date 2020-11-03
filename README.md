@@ -68,8 +68,9 @@ service.getFlowStringTodos().collect {
             }
 ```
 You can use [SharedFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/) as well
-
+```
 fun getFlowApiResultStringTodos(): SharedFlow<ApiResult<String>>
+```
 
 # Examples
 ```
