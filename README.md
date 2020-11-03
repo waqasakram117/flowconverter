@@ -1,12 +1,8 @@
 ### Flowconverter
  Retrofit2 call adapter factory it enables use of Kotlin [Flow](https://kotlinlang.org/docs/reference/coroutines/flow.html) and [SharedFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/)
  
-## Integration
-
-```gradle
-implementation 'com.waqasakram.retrofit2:flowconverter:0.1.5'
-```
 ## Usage
+
 ```kotlin
 val retrofit = Retrofit.Builder()
     .baseUrl("https://example.com/")
