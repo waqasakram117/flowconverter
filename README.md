@@ -6,7 +6,9 @@
 ```kotlin
 val retrofit = Retrofit.Builder()
     .baseUrl("https://example.com/")
-    .addCallAdapterFactory(FlowConverterFactory())
+    .addCallAdapterFactory(FlowConverterFactory()) // Here is Flow Converter Factory
+    .addConverterFactory(ScalarsConverterFactory.create())
+    .addConverterFactory(GsonConverterFactory.create())
     .build()
 ```
 After integration you can use 
