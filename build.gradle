@@ -1,11 +1,11 @@
 buildscript {
     ext.kotlin_version = '1.4.10'
     ext.versions = [
-            'kotlin': '1.4.10',
-            'retrofit': '2.6.4',
-            'okhttp': '3.14.7',
-            'junit': '4.13',
-            'coroutine':'1.4.0'
+            'kotlin'   : '1.4.10',
+            'retrofit' : '2.6.4',
+            'okhttp'   : '3.14.7',
+            'junit'    : '4.13',
+            'coroutine': '1.4.0'
     ]
     repositories {
         mavenCentral()
@@ -30,7 +30,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = 'flowconverter'
 group = 'com.waqasakram.retrofit2'
-version = '0.1.4'
+version = '0.1.5'
 description = 'Flow Converter is adapter to use Kotlin Flow in Retrofit calls'
 
 def libName = "flowconverter"
@@ -108,7 +108,6 @@ publishing {
 }
 
 
-
 bintray {
     user = apikeyProperties.getProperty('BINTRAY_USER')
     key = apikeyProperties.getProperty('BINTRAY_KEY')
@@ -123,7 +122,7 @@ bintray {
         version {
             name = project.version
             desc = project.description
-            released  = new Date()
+            released = new Date()
         }
     }
 }

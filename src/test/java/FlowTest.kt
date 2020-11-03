@@ -14,7 +14,7 @@ import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.util.*
+
 import java.util.concurrent.TimeUnit
 
 
@@ -31,9 +31,9 @@ class FlowTest {
     lateinit var service: PlaceHolderService
 
     @Before
-    fun initServer(){
+    fun initServer() {
         server = MockWebServer()
-         service =  Retrofit.Builder()
+        service = Retrofit.Builder()
                 .baseUrl(server.url("/"))
                 .addCallAdapterFactory(FlowConverterFactory())
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -43,7 +43,7 @@ class FlowTest {
     }
 
     @Test
-    fun testFlowWithApiResult(){
+    fun testFlowWithApiResult() {
 
         server.enqueue(
                 MockResponse()
@@ -52,7 +52,7 @@ class FlowTest {
                         .setBody(response))
 
         runBlocking {
-            val call  = service.getFlowApiResultStringTodos()
+            val call = service.getFlowApiResultStringTodos()
             call.withIndex().collect {
                 if (it.index == 0) assert(it.value is ApiResult.StartRequest)
                 else if (it.index == 1) assert(it.value is ApiResult.Success)
@@ -61,8 +61,9 @@ class FlowTest {
         }
 
     }
+
     @Test
-    fun testFlowWithApiToDoResult(){
+    fun testFlowWithApiToDoResult() {
 
         val listType = object : TypeToken<List<TodoResult?>?>() {}.type
         val list = Gson().fromJson<List<TodoResult>>(response, listType)
@@ -73,7 +74,7 @@ class FlowTest {
                         .setBody(response))
 
         runBlocking {
-            val call  = service.getFlowApiResultTodos()
+            val call = service.getFlowApiResultTodos()
             call.withIndex().collect {
                 if (it.index == 0) assert(it.value is ApiResult.StartRequest)
                 else if (it.index == 1) {
@@ -86,8 +87,9 @@ class FlowTest {
         }
 
     }
+
     @Test
-    fun clientErrorTestFlowWithApiResult(){
+    fun clientErrorTestFlowWithApiResult() {
 
         server.enqueue(
                 MockResponse()
@@ -96,7 +98,7 @@ class FlowTest {
                         .setBody(response))
 
         runBlocking {
-            val call  = service.getFlowApiResultStringTodos()
+            val call = service.getFlowApiResultStringTodos()
             call.withIndex().collect {
                 if (it.index == 0) assert(it.value is ApiResult.StartRequest)
                 else if (it.index == 1) assert(it.value is ApiResult.Error.ClientError)
@@ -107,7 +109,7 @@ class FlowTest {
     }
 
     @Test
-    fun testPlainFlow(){
+    fun testPlainFlow() {
 
         server.enqueue(
                 MockResponse()
@@ -116,7 +118,7 @@ class FlowTest {
                         .setBody(response))
 
         runBlocking {
-            val call  = service.getFlow()
+            val call = service.getFlow()
             assert(call.first() == response)
         }
 
@@ -124,7 +126,7 @@ class FlowTest {
 
 
     @After
-    fun shutdown(){
+    fun shutdown() {
 
         server.shutdown()
     }

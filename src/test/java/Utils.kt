@@ -1,4 +1,3 @@
-
 const val response = """[
   {
     "userId": 1,
@@ -601,6 +600,3 @@ const val response = """[
     "body": "cupiditate quo est a modi nesciunt soluta\nipsa voluptas error itaque dicta in\nautem qui minus magnam et distinctio eum\naccusamus ratione error aut"
   }
 ]"""
-
-class Utils {
-}
