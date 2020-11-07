@@ -1,5 +1,5 @@
 ### Flowconverter
- Retrofit2 call adapter factory it enables use of Kotlin [Flow](https://kotlinlang.org/docs/reference/coroutines/flow.html) and [SharedFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/)
+ Retrofit2 call adapter factory enables use of Kotlin [Flow](https://kotlinlang.org/docs/reference/coroutines/flow.html) and [SharedFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/)
  
 ## Usage
 
