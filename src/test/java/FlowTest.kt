@@ -109,7 +109,7 @@ class FlowTest {
     }
 
     @Test
-    fun clientErrorTestFlowWithApiResulft() {
+    fun clientErrorTestFlowWithApiResultResponse() {
 
         server.enqueue(
                 MockResponse()
@@ -124,29 +124,29 @@ class FlowTest {
                     is ApiResult.Success -> {
                         it.result // This is result
                     }
-                    is ApiResult.StartRequest -> TODO()
-                    is ApiResult.EndRequest -> TODO()
-                    is ApiResult.EmptyResult -> TODO()
+                    is ApiResult.StartRequest -> {}
+                    is ApiResult.EndRequest -> {}
+                    is ApiResult.EmptyResult -> {}
                     is ApiResult.Error -> {
                         when (it) {
                             is ApiResult.Error.ClientError -> {
                                 when (it) {
-                                    is ApiResult.Error.ClientError.UnAuthorized -> TODO()
-                                    is ApiResult.Error.ClientError.BadRequest -> TODO()
-                                    is ApiResult.Error.ClientError.Forbidden -> TODO()
-                                    is ApiResult.Error.ClientError.NotFound -> TODO()
-                                    is ApiResult.Error.ClientError.InternetConnection -> TODO()
+                                    is ApiResult.Error.ClientError.UnAuthorized -> {}
+                                    is ApiResult.Error.ClientError.BadRequest -> {}
+                                    is ApiResult.Error.ClientError.Forbidden -> {}
+                                    is ApiResult.Error.ClientError.NotFound -> {}
+                                    is ApiResult.Error.ClientError.InternetConnection -> {}
                                 }
                             }
                             is ApiResult.Error.ServerError -> {
                                 when (it) {
-                                    ApiResult.Error.ServerError.Internal -> TODO()
-                                    ApiResult.Error.ServerError.RequestNotImplemented -> TODO()
-                                    ApiResult.Error.ServerError.BadGateway -> TODO()
-                                    ApiResult.Error.ServerError.ServiceUnavailable -> TODO()
+                                    ApiResult.Error.ServerError.Internal -> {}
+                                    ApiResult.Error.ServerError.RequestNotImplemented -> {}
+                                    ApiResult.Error.ServerError.BadGateway -> {}
+                                    ApiResult.Error.ServerError.ServiceUnavailable -> {}
                                 }
                             }
-                            is ApiResult.Error.UnHandled -> TODO()
+                            is ApiResult.Error.UnHandled -> {}
                         }
                     }
 
