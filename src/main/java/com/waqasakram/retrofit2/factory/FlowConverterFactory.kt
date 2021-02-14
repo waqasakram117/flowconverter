@@ -3,6 +3,7 @@ package com.waqasakram.retrofit2.factory
 import com.waqasakram.retrofit2.ApiResult
 import com.waqasakram.retrofit2.adapter.FlowAdapter
 import com.waqasakram.retrofit2.adapter.FlowWrapAdapter
+import com.waqasakram.retrofit2.adapter.SharedFlowAdapter
 import com.waqasakram.retrofit2.adapter.SharedFlowWrapAdapter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -33,9 +34,13 @@ class FlowConverterFactory(private val dispatcher: CoroutineDispatcher = Dispatc
                 val response = getParameterUpperBound(0, responseType)
                 return FlowWrapAdapter<Any>(response, dispatcher)
             }
-        } else if (getRawType(returnType) == SharedFlow::class.java && getRawType(responseType) == ApiResult::class.java) {// use SharedFlow with ApiResult
-            val response = getParameterUpperBound(0, responseType as ParameterizedType)
-            return SharedFlowWrapAdapter<Any>(response, dispatcher)
+        } else if (getRawType(returnType) == SharedFlow::class.java) {
+            if (responseType !is ParameterizedType) {
+                return SharedFlowAdapter<Any>(responseType, dispatcher)
+            } else if (getRawType(responseType) == ApiResult::class.java) {// use SharedFlow with [ApiResult]
+                val response = getParameterUpperBound(0, responseType)
+                return SharedFlowWrapAdapter<Any>(response, dispatcher)
+            }
         }
         return null
     }

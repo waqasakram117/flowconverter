@@ -19,4 +19,8 @@ interface PlaceHolderService {
 
     @GET("/todos/")
     fun getSharedFlowApiResultTodos(): SharedFlow<ApiResult<List<TodoResult>>>
+
+
+    @GET("/todos/")
+    fun getSharedFlowStringTodos(): SharedFlow<String>
 }

@@ -109,6 +109,54 @@ class FlowTest {
     }
 
     @Test
+    fun clientErrorTestFlowWithApiResulft() {
+
+        server.enqueue(
+                MockResponse()
+                        .setResponseCode(401)
+                        .setBodyDelay(1, TimeUnit.SECONDS)
+                        .setBody(response))
+
+        runBlocking {
+            val call = service.getFlowApiResultStringTodos()
+            call.collect {
+                when (it) {
+                    is ApiResult.Success -> {
+                        it.result // This is result
+                    }
+                    is ApiResult.StartRequest -> TODO()
+                    is ApiResult.EndRequest -> TODO()
+                    is ApiResult.EmptyResult -> TODO()
+                    is ApiResult.Error -> {
+                        when (it) {
+                            is ApiResult.Error.ClientError -> {
+                                when (it) {
+                                    is ApiResult.Error.ClientError.UnAuthorized -> TODO()
+                                    is ApiResult.Error.ClientError.BadRequest -> TODO()
+                                    is ApiResult.Error.ClientError.Forbidden -> TODO()
+                                    is ApiResult.Error.ClientError.NotFound -> TODO()
+                                    is ApiResult.Error.ClientError.InternetConnection -> TODO()
+                                }
+                            }
+                            is ApiResult.Error.ServerError -> {
+                                when (it) {
+                                    ApiResult.Error.ServerError.Internal -> TODO()
+                                    ApiResult.Error.ServerError.RequestNotImplemented -> TODO()
+                                    ApiResult.Error.ServerError.BadGateway -> TODO()
+                                    ApiResult.Error.ServerError.ServiceUnavailable -> TODO()
+                                }
+                            }
+                            is ApiResult.Error.UnHandled -> TODO()
+                        }
+                    }
+
+                }
+            }
+        }
+
+    }
+
+    @Test
     fun testPlainFlow() {
 
         server.enqueue(

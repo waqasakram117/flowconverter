@@ -3,11 +3,9 @@ import com.google.gson.reflect.TypeToken
 import com.waqasakram.retrofit2.ApiResult
 import com.waqasakram.retrofit2.adapter.collectResult
 import com.waqasakram.retrofit2.factory.FlowConverterFactory
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.first
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -17,6 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.CoroutineContext
 
 class SharedFlowTest {
 
@@ -29,7 +28,7 @@ class SharedFlowTest {
         server = MockWebServer()
         service = Retrofit.Builder()
                 .baseUrl(server.url("/"))
-                .addCallAdapterFactory(FlowConverterFactory())
+                .addCallAdapterFactory(FlowConverterFactory(dispatcher = newSingleThreadContext("testing")))
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -120,6 +119,40 @@ class SharedFlowTest {
 
         assert(true)
     }
+
+    @Test
+    fun testPlainSharedFlow(){
+        server.enqueue(
+                MockResponse()
+                        .setResponseCode(200)
+                        .setBodyDelay(1, TimeUnit.SECONDS)
+                        .setBody(response))
+
+        runBlocking {
+            val call = service.getSharedFlowStringTodos()
+            assert(call.first() == response)
+        }
+
+}
+
+
+    @Test
+    fun testPlainSharedFlowWithError(){
+
+        server.enqueue(
+                MockResponse()
+                        .setResponseCode(400)
+                        .setBodyDelay(1, TimeUnit.SECONDS)
+                        .setBody(response))
+
+        runBlocking {
+             val call = service.getSharedFlowStringTodos()
+                print(call.first())
+
+        }
+
+}
+
 
     @After
     fun shutdown() {

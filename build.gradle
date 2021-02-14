@@ -1,7 +1,7 @@
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.30'
     ext.versions = [
-            'kotlin'   : '1.4.10',
+            'kotlin'   : '1.4.30',
             'retrofit' : '2.6.4',
             'okhttp'   : '3.14.7',
             'junit'    : '4.13',
@@ -30,7 +30,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 archivesBaseName = 'flowconverter'
 group = 'com.waqasakram.retrofit2'
-version = '0.1.5'
+version = '0.1.6'
 description = 'Flow Converter is adapter to use Kotlin Flow in Retrofit calls'
 
 def libName = "flowconverter"
